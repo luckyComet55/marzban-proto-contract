@@ -1,4 +1,4 @@
-GEN_DIR=gen/go/
+GEN_DIR=gen/go/contract
 
 .PHONY: generate help
 
