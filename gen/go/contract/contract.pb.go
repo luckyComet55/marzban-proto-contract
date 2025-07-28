@@ -92,6 +92,8 @@ func (x *UserInfo) GetConfigUrls() []string {
 
 type CreateUserInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	ProxyProtocol string                 `protobuf:"bytes,2,opt,name=proxy_protocol,json=proxyProtocol,proto3" json:"proxy_protocol,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -126,6 +128,20 @@ func (*CreateUserInfo) Descriptor() ([]byte, []int) {
 	return file_contract_proto_rawDescGZIP(), []int{1}
 }
 
+func (x *CreateUserInfo) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *CreateUserInfo) GetProxyProtocol() string {
+	if x != nil {
+		return x.ProxyProtocol
+	}
+	return ""
+}
+
 var File_contract_proto protoreflect.FileDescriptor
 
 const file_contract_proto_rawDesc = "" +
@@ -136,8 +152,10 @@ const file_contract_proto_rawDesc = "" +
 	"\x06status\x18\x02 \x01(\tR\x06status\x12!\n" +
 	"\fused_traffic\x18\x03 \x01(\x04R\vusedTraffic\x12\x1f\n" +
 	"\vconfig_urls\x18\x04 \x03(\tR\n" +
-	"configUrls\"\x10\n" +
-	"\x0eCreateUserInfo2\xc6\x01\n" +
+	"configUrls\"S\n" +
+	"\x0eCreateUserInfo\x12\x1a\n" +
+	"\busername\x18\x01 \x01(\tR\busername\x12%\n" +
+	"\x0eproxy_protocol\x18\x02 \x01(\tR\rproxyProtocol2\xc6\x01\n" +
 	"\x16MarzbanManagementPanel\x12L\n" +
 	"\tListUsers\x12\x16.google.protobuf.Empty\x1a#.luckyComet55.marzban_mgmt.UserInfo\"\x000\x01\x12^\n" +
 	"\n" +
