@@ -90,6 +90,42 @@ func (x *UserInfo) GetConfigUrls() []string {
 	return nil
 }
 
+type CreateUserInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateUserInfo) Reset() {
+	*x = CreateUserInfo{}
+	mi := &file_contract_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateUserInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateUserInfo) ProtoMessage() {}
+
+func (x *CreateUserInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateUserInfo.ProtoReflect.Descriptor instead.
+func (*CreateUserInfo) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{1}
+}
+
 var File_contract_proto protoreflect.FileDescriptor
 
 const file_contract_proto_rawDesc = "" +
@@ -100,9 +136,12 @@ const file_contract_proto_rawDesc = "" +
 	"\x06status\x18\x02 \x01(\tR\x06status\x12!\n" +
 	"\fused_traffic\x18\x03 \x01(\x04R\vusedTraffic\x12\x1f\n" +
 	"\vconfig_urls\x18\x04 \x03(\tR\n" +
-	"configUrls2f\n" +
+	"configUrls\"\x10\n" +
+	"\x0eCreateUserInfo2\xc6\x01\n" +
 	"\x16MarzbanManagementPanel\x12L\n" +
-	"\tListUsers\x12\x16.google.protobuf.Empty\x1a#.luckyComet55.marzban_mgmt.UserInfo\"\x000\x01B@Z>github.com/luckyComet55/marzban-proto-contract/gen/go/contractb\x06proto3"
+	"\tListUsers\x12\x16.google.protobuf.Empty\x1a#.luckyComet55.marzban_mgmt.UserInfo\"\x000\x01\x12^\n" +
+	"\n" +
+	"CreateUser\x12).luckyComet55.marzban_mgmt.CreateUserInfo\x1a#.luckyComet55.marzban_mgmt.UserInfo\"\x00B@Z>github.com/luckyComet55/marzban-proto-contract/gen/go/contractb\x06proto3"
 
 var (
 	file_contract_proto_rawDescOnce sync.Once
@@ -116,16 +155,19 @@ func file_contract_proto_rawDescGZIP() []byte {
 	return file_contract_proto_rawDescData
 }
 
-var file_contract_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_contract_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_contract_proto_goTypes = []any{
-	(*UserInfo)(nil),      // 0: luckyComet55.marzban_mgmt.UserInfo
-	(*emptypb.Empty)(nil), // 1: google.protobuf.Empty
+	(*UserInfo)(nil),       // 0: luckyComet55.marzban_mgmt.UserInfo
+	(*CreateUserInfo)(nil), // 1: luckyComet55.marzban_mgmt.CreateUserInfo
+	(*emptypb.Empty)(nil),  // 2: google.protobuf.Empty
 }
 var file_contract_proto_depIdxs = []int32{
-	1, // 0: luckyComet55.marzban_mgmt.MarzbanManagementPanel.ListUsers:input_type -> google.protobuf.Empty
-	0, // 1: luckyComet55.marzban_mgmt.MarzbanManagementPanel.ListUsers:output_type -> luckyComet55.marzban_mgmt.UserInfo
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 0: luckyComet55.marzban_mgmt.MarzbanManagementPanel.ListUsers:input_type -> google.protobuf.Empty
+	1, // 1: luckyComet55.marzban_mgmt.MarzbanManagementPanel.CreateUser:input_type -> luckyComet55.marzban_mgmt.CreateUserInfo
+	0, // 2: luckyComet55.marzban_mgmt.MarzbanManagementPanel.ListUsers:output_type -> luckyComet55.marzban_mgmt.UserInfo
+	0, // 3: luckyComet55.marzban_mgmt.MarzbanManagementPanel.CreateUser:output_type -> luckyComet55.marzban_mgmt.UserInfo
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -142,7 +184,7 @@ func file_contract_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_contract_proto_rawDesc), len(file_contract_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

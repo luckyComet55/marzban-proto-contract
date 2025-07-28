@@ -8,6 +8,7 @@ option go_package = "github.com/luckyComet55/marzban-proto-contract/gen/go/contr
 service MarzbanManagementPanel {
 
     rpc ListUsers (google.protobuf.Empty) returns (stream UserInfo) {}
+    rpc CreateUser (CreateUserInfo) returns (UserInfo) {}
 }
 
 message UserInfo {
@@ -15,4 +16,9 @@ message UserInfo {
     string status = 2;
     uint64 used_traffic = 3;
     repeated string config_urls = 4;
+}
+
+message CreateUserInfo {
+    string username = 1;
+    string proxy_protocol = 2;
 }
