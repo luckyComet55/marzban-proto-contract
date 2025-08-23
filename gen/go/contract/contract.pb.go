@@ -22,19 +22,124 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type ProxyProtocolType int32
+
+const (
+	ProxyProtocolType_VMESS       ProxyProtocolType = 0
+	ProxyProtocolType_VLESS       ProxyProtocolType = 1
+	ProxyProtocolType_TROJAN      ProxyProtocolType = 2
+	ProxyProtocolType_SHADOWSOCKS ProxyProtocolType = 3
+)
+
+// Enum value maps for ProxyProtocolType.
+var (
+	ProxyProtocolType_name = map[int32]string{
+		0: "VMESS",
+		1: "VLESS",
+		2: "TROJAN",
+		3: "SHADOWSOCKS",
+	}
+	ProxyProtocolType_value = map[string]int32{
+		"VMESS":       0,
+		"VLESS":       1,
+		"TROJAN":      2,
+		"SHADOWSOCKS": 3,
+	}
+)
+
+func (x ProxyProtocolType) Enum() *ProxyProtocolType {
+	p := new(ProxyProtocolType)
+	*p = x
+	return p
+}
+
+func (x ProxyProtocolType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ProxyProtocolType) Descriptor() protoreflect.EnumDescriptor {
+	return file_contract_proto_enumTypes[0].Descriptor()
+}
+
+func (ProxyProtocolType) Type() protoreflect.EnumType {
+	return &file_contract_proto_enumTypes[0]
+}
+
+func (x ProxyProtocolType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ProxyProtocolType.Descriptor instead.
+func (ProxyProtocolType) EnumDescriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{0}
+}
+
+type ProxyProtocolInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ProxyName     string                 `protobuf:"bytes,1,opt,name=proxy_name,json=proxyName,proto3" json:"proxy_name,omitempty"`
+	ProtocolType  ProxyProtocolType      `protobuf:"varint,2,opt,name=protocol_type,json=protocolType,proto3,enum=luckyComet55.marzban_mgmt.ProxyProtocolType" json:"protocol_type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ProxyProtocolInfo) Reset() {
+	*x = ProxyProtocolInfo{}
+	mi := &file_contract_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ProxyProtocolInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProxyProtocolInfo) ProtoMessage() {}
+
+func (x *ProxyProtocolInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProxyProtocolInfo.ProtoReflect.Descriptor instead.
+func (*ProxyProtocolInfo) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *ProxyProtocolInfo) GetProxyName() string {
+	if x != nil {
+		return x.ProxyName
+	}
+	return ""
+}
+
+func (x *ProxyProtocolInfo) GetProtocolType() ProxyProtocolType {
+	if x != nil {
+		return x.ProtocolType
+	}
+	return ProxyProtocolType_VMESS
+}
+
 type UserInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	Status        string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
 	UsedTraffic   uint64                 `protobuf:"varint,3,opt,name=used_traffic,json=usedTraffic,proto3" json:"used_traffic,omitempty"`
 	ConfigUrls    []string               `protobuf:"bytes,4,rep,name=config_urls,json=configUrls,proto3" json:"config_urls,omitempty"`
+	ProxyProtocol []*ProxyProtocolInfo   `protobuf:"bytes,5,rep,name=proxy_protocol,json=proxyProtocol,proto3" json:"proxy_protocol,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UserInfo) Reset() {
 	*x = UserInfo{}
-	mi := &file_contract_proto_msgTypes[0]
+	mi := &file_contract_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -46,7 +151,7 @@ func (x *UserInfo) String() string {
 func (*UserInfo) ProtoMessage() {}
 
 func (x *UserInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_contract_proto_msgTypes[0]
+	mi := &file_contract_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -59,7 +164,7 @@ func (x *UserInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserInfo.ProtoReflect.Descriptor instead.
 func (*UserInfo) Descriptor() ([]byte, []int) {
-	return file_contract_proto_rawDescGZIP(), []int{0}
+	return file_contract_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *UserInfo) GetUsername() string {
@@ -90,6 +195,13 @@ func (x *UserInfo) GetConfigUrls() []string {
 	return nil
 }
 
+func (x *UserInfo) GetProxyProtocol() []*ProxyProtocolInfo {
+	if x != nil {
+		return x.ProxyProtocol
+	}
+	return nil
+}
+
 type CreateUserInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
@@ -100,7 +212,7 @@ type CreateUserInfo struct {
 
 func (x *CreateUserInfo) Reset() {
 	*x = CreateUserInfo{}
-	mi := &file_contract_proto_msgTypes[1]
+	mi := &file_contract_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -112,7 +224,7 @@ func (x *CreateUserInfo) String() string {
 func (*CreateUserInfo) ProtoMessage() {}
 
 func (x *CreateUserInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_contract_proto_msgTypes[1]
+	mi := &file_contract_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -125,7 +237,7 @@ func (x *CreateUserInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUserInfo.ProtoReflect.Descriptor instead.
 func (*CreateUserInfo) Descriptor() ([]byte, []int) {
-	return file_contract_proto_rawDescGZIP(), []int{1}
+	return file_contract_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreateUserInfo) GetUsername() string {
@@ -146,20 +258,32 @@ var File_contract_proto protoreflect.FileDescriptor
 
 const file_contract_proto_rawDesc = "" +
 	"\n" +
-	"\x0econtract.proto\x12\x19luckyComet55.marzban_mgmt\x1a\x1bgoogle/protobuf/empty.proto\"\x82\x01\n" +
+	"\x0econtract.proto\x12\x19luckyComet55.marzban_mgmt\x1a\x1bgoogle/protobuf/empty.proto\"\x85\x01\n" +
+	"\x11ProxyProtocolInfo\x12\x1d\n" +
+	"\n" +
+	"proxy_name\x18\x01 \x01(\tR\tproxyName\x12Q\n" +
+	"\rprotocol_type\x18\x02 \x01(\x0e2,.luckyComet55.marzban_mgmt.ProxyProtocolTypeR\fprotocolType\"\xd7\x01\n" +
 	"\bUserInfo\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x16\n" +
 	"\x06status\x18\x02 \x01(\tR\x06status\x12!\n" +
 	"\fused_traffic\x18\x03 \x01(\x04R\vusedTraffic\x12\x1f\n" +
 	"\vconfig_urls\x18\x04 \x03(\tR\n" +
-	"configUrls\"S\n" +
+	"configUrls\x12S\n" +
+	"\x0eproxy_protocol\x18\x05 \x03(\v2,.luckyComet55.marzban_mgmt.ProxyProtocolInfoR\rproxyProtocol\"S\n" +
 	"\x0eCreateUserInfo\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12%\n" +
-	"\x0eproxy_protocol\x18\x02 \x01(\tR\rproxyProtocol2\xc6\x01\n" +
+	"\x0eproxy_protocol\x18\x02 \x01(\tR\rproxyProtocol*F\n" +
+	"\x11ProxyProtocolType\x12\t\n" +
+	"\x05VMESS\x10\x00\x12\t\n" +
+	"\x05VLESS\x10\x01\x12\n" +
+	"\n" +
+	"\x06TROJAN\x10\x02\x12\x0f\n" +
+	"\vSHADOWSOCKS\x10\x032\x9f\x02\n" +
 	"\x16MarzbanManagementPanel\x12L\n" +
 	"\tListUsers\x12\x16.google.protobuf.Empty\x1a#.luckyComet55.marzban_mgmt.UserInfo\"\x000\x01\x12^\n" +
 	"\n" +
-	"CreateUser\x12).luckyComet55.marzban_mgmt.CreateUserInfo\x1a#.luckyComet55.marzban_mgmt.UserInfo\"\x00B@Z>github.com/luckyComet55/marzban-proto-contract/gen/go/contractb\x06proto3"
+	"CreateUser\x12).luckyComet55.marzban_mgmt.CreateUserInfo\x1a#.luckyComet55.marzban_mgmt.UserInfo\"\x00\x12W\n" +
+	"\vListProxies\x12\x16.google.protobuf.Empty\x1a,.luckyComet55.marzban_mgmt.ProxyProtocolInfo\"\x000\x01B@Z>github.com/luckyComet55/marzban-proto-contract/gen/go/contractb\x06proto3"
 
 var (
 	file_contract_proto_rawDescOnce sync.Once
@@ -173,22 +297,29 @@ func file_contract_proto_rawDescGZIP() []byte {
 	return file_contract_proto_rawDescData
 }
 
-var file_contract_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_contract_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_contract_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_contract_proto_goTypes = []any{
-	(*UserInfo)(nil),       // 0: luckyComet55.marzban_mgmt.UserInfo
-	(*CreateUserInfo)(nil), // 1: luckyComet55.marzban_mgmt.CreateUserInfo
-	(*emptypb.Empty)(nil),  // 2: google.protobuf.Empty
+	(ProxyProtocolType)(0),    // 0: luckyComet55.marzban_mgmt.ProxyProtocolType
+	(*ProxyProtocolInfo)(nil), // 1: luckyComet55.marzban_mgmt.ProxyProtocolInfo
+	(*UserInfo)(nil),          // 2: luckyComet55.marzban_mgmt.UserInfo
+	(*CreateUserInfo)(nil),    // 3: luckyComet55.marzban_mgmt.CreateUserInfo
+	(*emptypb.Empty)(nil),     // 4: google.protobuf.Empty
 }
 var file_contract_proto_depIdxs = []int32{
-	2, // 0: luckyComet55.marzban_mgmt.MarzbanManagementPanel.ListUsers:input_type -> google.protobuf.Empty
-	1, // 1: luckyComet55.marzban_mgmt.MarzbanManagementPanel.CreateUser:input_type -> luckyComet55.marzban_mgmt.CreateUserInfo
-	0, // 2: luckyComet55.marzban_mgmt.MarzbanManagementPanel.ListUsers:output_type -> luckyComet55.marzban_mgmt.UserInfo
-	0, // 3: luckyComet55.marzban_mgmt.MarzbanManagementPanel.CreateUser:output_type -> luckyComet55.marzban_mgmt.UserInfo
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0, // 0: luckyComet55.marzban_mgmt.ProxyProtocolInfo.protocol_type:type_name -> luckyComet55.marzban_mgmt.ProxyProtocolType
+	1, // 1: luckyComet55.marzban_mgmt.UserInfo.proxy_protocol:type_name -> luckyComet55.marzban_mgmt.ProxyProtocolInfo
+	4, // 2: luckyComet55.marzban_mgmt.MarzbanManagementPanel.ListUsers:input_type -> google.protobuf.Empty
+	3, // 3: luckyComet55.marzban_mgmt.MarzbanManagementPanel.CreateUser:input_type -> luckyComet55.marzban_mgmt.CreateUserInfo
+	4, // 4: luckyComet55.marzban_mgmt.MarzbanManagementPanel.ListProxies:input_type -> google.protobuf.Empty
+	2, // 5: luckyComet55.marzban_mgmt.MarzbanManagementPanel.ListUsers:output_type -> luckyComet55.marzban_mgmt.UserInfo
+	2, // 6: luckyComet55.marzban_mgmt.MarzbanManagementPanel.CreateUser:output_type -> luckyComet55.marzban_mgmt.UserInfo
+	1, // 7: luckyComet55.marzban_mgmt.MarzbanManagementPanel.ListProxies:output_type -> luckyComet55.marzban_mgmt.ProxyProtocolInfo
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_contract_proto_init() }
@@ -201,13 +332,14 @@ func file_contract_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_contract_proto_rawDesc), len(file_contract_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   2,
+			NumEnums:      1,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_contract_proto_goTypes,
 		DependencyIndexes: file_contract_proto_depIdxs,
+		EnumInfos:         file_contract_proto_enumTypes,
 		MessageInfos:      file_contract_proto_msgTypes,
 	}.Build()
 	File_contract_proto = out.File

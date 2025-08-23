@@ -20,8 +20,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	MarzbanManagementPanel_ListUsers_FullMethodName  = "/luckyComet55.marzban_mgmt.MarzbanManagementPanel/ListUsers"
-	MarzbanManagementPanel_CreateUser_FullMethodName = "/luckyComet55.marzban_mgmt.MarzbanManagementPanel/CreateUser"
+	MarzbanManagementPanel_ListUsers_FullMethodName   = "/luckyComet55.marzban_mgmt.MarzbanManagementPanel/ListUsers"
+	MarzbanManagementPanel_CreateUser_FullMethodName  = "/luckyComet55.marzban_mgmt.MarzbanManagementPanel/CreateUser"
+	MarzbanManagementPanel_ListProxies_FullMethodName = "/luckyComet55.marzban_mgmt.MarzbanManagementPanel/ListProxies"
 )
 
 // MarzbanManagementPanelClient is the client API for MarzbanManagementPanel service.
@@ -30,6 +31,7 @@ const (
 type MarzbanManagementPanelClient interface {
 	ListUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UserInfo], error)
 	CreateUser(ctx context.Context, in *CreateUserInfo, opts ...grpc.CallOption) (*UserInfo, error)
+	ListProxies(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ProxyProtocolInfo], error)
 }
 
 type marzbanManagementPanelClient struct {
@@ -69,12 +71,32 @@ func (c *marzbanManagementPanelClient) CreateUser(ctx context.Context, in *Creat
 	return out, nil
 }
 
+func (c *marzbanManagementPanelClient) ListProxies(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ProxyProtocolInfo], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &MarzbanManagementPanel_ServiceDesc.Streams[1], MarzbanManagementPanel_ListProxies_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[emptypb.Empty, ProxyProtocolInfo]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type MarzbanManagementPanel_ListProxiesClient = grpc.ServerStreamingClient[ProxyProtocolInfo]
+
 // MarzbanManagementPanelServer is the server API for MarzbanManagementPanel service.
 // All implementations must embed UnimplementedMarzbanManagementPanelServer
 // for forward compatibility.
 type MarzbanManagementPanelServer interface {
 	ListUsers(*emptypb.Empty, grpc.ServerStreamingServer[UserInfo]) error
 	CreateUser(context.Context, *CreateUserInfo) (*UserInfo, error)
+	ListProxies(*emptypb.Empty, grpc.ServerStreamingServer[ProxyProtocolInfo]) error
 	mustEmbedUnimplementedMarzbanManagementPanelServer()
 }
 
@@ -90,6 +112,9 @@ func (UnimplementedMarzbanManagementPanelServer) ListUsers(*emptypb.Empty, grpc.
 }
 func (UnimplementedMarzbanManagementPanelServer) CreateUser(context.Context, *CreateUserInfo) (*UserInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
+}
+func (UnimplementedMarzbanManagementPanelServer) ListProxies(*emptypb.Empty, grpc.ServerStreamingServer[ProxyProtocolInfo]) error {
+	return status.Errorf(codes.Unimplemented, "method ListProxies not implemented")
 }
 func (UnimplementedMarzbanManagementPanelServer) mustEmbedUnimplementedMarzbanManagementPanelServer() {
 }
@@ -142,6 +167,17 @@ func _MarzbanManagementPanel_CreateUser_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MarzbanManagementPanel_ListProxies_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(emptypb.Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(MarzbanManagementPanelServer).ListProxies(m, &grpc.GenericServerStream[emptypb.Empty, ProxyProtocolInfo]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type MarzbanManagementPanel_ListProxiesServer = grpc.ServerStreamingServer[ProxyProtocolInfo]
+
 // MarzbanManagementPanel_ServiceDesc is the grpc.ServiceDesc for MarzbanManagementPanel service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -158,6 +194,11 @@ var MarzbanManagementPanel_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "ListUsers",
 			Handler:       _MarzbanManagementPanel_ListUsers_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "ListProxies",
+			Handler:       _MarzbanManagementPanel_ListProxies_Handler,
 			ServerStreams: true,
 		},
 	},

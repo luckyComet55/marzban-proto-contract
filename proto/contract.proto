@@ -9,6 +9,19 @@ service MarzbanManagementPanel {
 
     rpc ListUsers (google.protobuf.Empty) returns (stream UserInfo) {}
     rpc CreateUser (CreateUserInfo) returns (UserInfo) {}
+    rpc ListProxies (google.protobuf.Empty) returns (stream ProxyProtocolInfo) {}
+}
+
+enum ProxyProtocolType {
+    VMESS = 0;
+    VLESS = 1;
+    TROJAN = 2;
+    SHADOWSOCKS = 3;
+}
+
+message ProxyProtocolInfo {
+    string proxy_name = 1;
+    ProxyProtocolType protocol_type = 2;
 }
 
 message UserInfo {
@@ -16,6 +29,7 @@ message UserInfo {
     string status = 2;
     uint64 used_traffic = 3;
     repeated string config_urls = 4;
+    repeated ProxyProtocolInfo proxy_protocol = 5;
 }
 
 message CreateUserInfo {
