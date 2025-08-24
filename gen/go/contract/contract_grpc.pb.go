@@ -23,15 +23,17 @@ const (
 	MarzbanManagementPanel_ListUsers_FullMethodName   = "/luckyComet55.marzban_mgmt.MarzbanManagementPanel/ListUsers"
 	MarzbanManagementPanel_CreateUser_FullMethodName  = "/luckyComet55.marzban_mgmt.MarzbanManagementPanel/CreateUser"
 	MarzbanManagementPanel_ListProxies_FullMethodName = "/luckyComet55.marzban_mgmt.MarzbanManagementPanel/ListProxies"
+	MarzbanManagementPanel_GetUser_FullMethodName     = "/luckyComet55.marzban_mgmt.MarzbanManagementPanel/GetUser"
 )
 
 // MarzbanManagementPanelClient is the client API for MarzbanManagementPanel service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MarzbanManagementPanelClient interface {
-	ListUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UserInfo], error)
+	ListUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UserShortInfo], error)
 	CreateUser(ctx context.Context, in *CreateUserInfo, opts ...grpc.CallOption) (*UserInfo, error)
 	ListProxies(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ProxyProtocolInfo], error)
+	GetUser(ctx context.Context, in *UserShortInfo, opts ...grpc.CallOption) (*UserInfo, error)
 }
 
 type marzbanManagementPanelClient struct {
@@ -42,13 +44,13 @@ func NewMarzbanManagementPanelClient(cc grpc.ClientConnInterface) MarzbanManagem
 	return &marzbanManagementPanelClient{cc}
 }
 
-func (c *marzbanManagementPanelClient) ListUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UserInfo], error) {
+func (c *marzbanManagementPanelClient) ListUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UserShortInfo], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &MarzbanManagementPanel_ServiceDesc.Streams[0], MarzbanManagementPanel_ListUsers_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &grpc.GenericClientStream[emptypb.Empty, UserInfo]{ClientStream: stream}
+	x := &grpc.GenericClientStream[emptypb.Empty, UserShortInfo]{ClientStream: stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -59,7 +61,7 @@ func (c *marzbanManagementPanelClient) ListUsers(ctx context.Context, in *emptyp
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type MarzbanManagementPanel_ListUsersClient = grpc.ServerStreamingClient[UserInfo]
+type MarzbanManagementPanel_ListUsersClient = grpc.ServerStreamingClient[UserShortInfo]
 
 func (c *marzbanManagementPanelClient) CreateUser(ctx context.Context, in *CreateUserInfo, opts ...grpc.CallOption) (*UserInfo, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
@@ -90,13 +92,24 @@ func (c *marzbanManagementPanelClient) ListProxies(ctx context.Context, in *empt
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type MarzbanManagementPanel_ListProxiesClient = grpc.ServerStreamingClient[ProxyProtocolInfo]
 
+func (c *marzbanManagementPanelClient) GetUser(ctx context.Context, in *UserShortInfo, opts ...grpc.CallOption) (*UserInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserInfo)
+	err := c.cc.Invoke(ctx, MarzbanManagementPanel_GetUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MarzbanManagementPanelServer is the server API for MarzbanManagementPanel service.
 // All implementations must embed UnimplementedMarzbanManagementPanelServer
 // for forward compatibility.
 type MarzbanManagementPanelServer interface {
-	ListUsers(*emptypb.Empty, grpc.ServerStreamingServer[UserInfo]) error
+	ListUsers(*emptypb.Empty, grpc.ServerStreamingServer[UserShortInfo]) error
 	CreateUser(context.Context, *CreateUserInfo) (*UserInfo, error)
 	ListProxies(*emptypb.Empty, grpc.ServerStreamingServer[ProxyProtocolInfo]) error
+	GetUser(context.Context, *UserShortInfo) (*UserInfo, error)
 	mustEmbedUnimplementedMarzbanManagementPanelServer()
 }
 
@@ -107,7 +120,7 @@ type MarzbanManagementPanelServer interface {
 // pointer dereference when methods are called.
 type UnimplementedMarzbanManagementPanelServer struct{}
 
-func (UnimplementedMarzbanManagementPanelServer) ListUsers(*emptypb.Empty, grpc.ServerStreamingServer[UserInfo]) error {
+func (UnimplementedMarzbanManagementPanelServer) ListUsers(*emptypb.Empty, grpc.ServerStreamingServer[UserShortInfo]) error {
 	return status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
 }
 func (UnimplementedMarzbanManagementPanelServer) CreateUser(context.Context, *CreateUserInfo) (*UserInfo, error) {
@@ -115,6 +128,9 @@ func (UnimplementedMarzbanManagementPanelServer) CreateUser(context.Context, *Cr
 }
 func (UnimplementedMarzbanManagementPanelServer) ListProxies(*emptypb.Empty, grpc.ServerStreamingServer[ProxyProtocolInfo]) error {
 	return status.Errorf(codes.Unimplemented, "method ListProxies not implemented")
+}
+func (UnimplementedMarzbanManagementPanelServer) GetUser(context.Context, *UserShortInfo) (*UserInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
 func (UnimplementedMarzbanManagementPanelServer) mustEmbedUnimplementedMarzbanManagementPanelServer() {
 }
@@ -143,11 +159,11 @@ func _MarzbanManagementPanel_ListUsers_Handler(srv interface{}, stream grpc.Serv
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(MarzbanManagementPanelServer).ListUsers(m, &grpc.GenericServerStream[emptypb.Empty, UserInfo]{ServerStream: stream})
+	return srv.(MarzbanManagementPanelServer).ListUsers(m, &grpc.GenericServerStream[emptypb.Empty, UserShortInfo]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type MarzbanManagementPanel_ListUsersServer = grpc.ServerStreamingServer[UserInfo]
+type MarzbanManagementPanel_ListUsersServer = grpc.ServerStreamingServer[UserShortInfo]
 
 func _MarzbanManagementPanel_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateUserInfo)
@@ -178,6 +194,24 @@ func _MarzbanManagementPanel_ListProxies_Handler(srv interface{}, stream grpc.Se
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type MarzbanManagementPanel_ListProxiesServer = grpc.ServerStreamingServer[ProxyProtocolInfo]
 
+func _MarzbanManagementPanel_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserShortInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MarzbanManagementPanelServer).GetUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MarzbanManagementPanel_GetUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MarzbanManagementPanelServer).GetUser(ctx, req.(*UserShortInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MarzbanManagementPanel_ServiceDesc is the grpc.ServiceDesc for MarzbanManagementPanel service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -188,6 +222,10 @@ var MarzbanManagementPanel_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateUser",
 			Handler:    _MarzbanManagementPanel_CreateUser_Handler,
+		},
+		{
+			MethodName: "GetUser",
+			Handler:    _MarzbanManagementPanel_GetUser_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

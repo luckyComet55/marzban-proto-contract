@@ -7,9 +7,10 @@ option go_package = "github.com/luckyComet55/marzban-proto-contract/gen/go/contr
 
 service MarzbanManagementPanel {
 
-    rpc ListUsers (google.protobuf.Empty) returns (stream UserInfo) {}
+    rpc ListUsers (google.protobuf.Empty) returns (stream UserShortInfo) {}
     rpc CreateUser (CreateUserInfo) returns (UserInfo) {}
     rpc ListProxies (google.protobuf.Empty) returns (stream ProxyProtocolInfo) {}
+    rpc GetUser (UserShortInfo) returns (UserInfo) {}
 }
 
 enum ProxyProtocolType {
@@ -22,6 +23,10 @@ enum ProxyProtocolType {
 message ProxyProtocolInfo {
     string proxy_name = 1;
     ProxyProtocolType protocol_type = 2;
+}
+
+message UserShortInfo {
+    string username = 1;
 }
 
 message UserInfo {
